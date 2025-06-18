@@ -38,6 +38,7 @@ pip install pandas matplotlib statsmodels
 First let's simply determine the ten top players in FPL in the 24/25 season. 
 
 ```python
+import pandas as pd
 # add full_name variable for clarity and readibility of the tables
 df["full_name"] = df["first_name"] + " " + df["second_name"]
 
