@@ -1,6 +1,6 @@
 # python-fantasy-football-analysis
 
-This project shows my journey into learning Python for data analysis using football data from Fantasy Premier League. I explore the significance of various variables within the dataset, ultimately culminating in the development of an optimized team selection strategy.
+This project shows my journey into learning Python for data analysis using football data from Fantasy Premier League. I explore the significance of various variables within the dataset.
 
 ## Overview
 The project consists of the tabulation of players in different positions. We'll also examine the top players in terms on price to total points ratio, influence, creativity and threat (ICT). 
