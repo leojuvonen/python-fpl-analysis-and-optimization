@@ -32,9 +32,9 @@ You can install them using:
 
 ```bash
 pip install pandas matplotlib statsmodels
-
-## Top Performers
 ```
+## Top Performers
+
 First let's simply determine the ten top players in FPL in the 24/25 season. 
 
 ```python
