@@ -13,14 +13,8 @@ The tool used in this project is Python. This analysis is mainly designed to hel
 The data used in this analysis is from vaastav's Github: https://github.com/vaastav/Fantasy-Premier-League/
 
 ## Project structure
-python-fantasy-football-analysis/
-│
-├── data/
-│   └── cleaned_players.csv
-│
-├── images/
-│   └── ict_plot.png
-│
-├── fpl_analysis.ipynb   # If using a notebook
-├── fpl_analysis.py      # (optional) Script version
-├── README.md
+<code>  python-fantasy-football-analysis/
+  ├── data/ # Sample or anonymized datasets 
+  ├── scripts/ # R scripts used in the analysis 
+  ├── images/ # output plots
+  └── README.md # Project overview and usage instructions </code> </code></pre>
