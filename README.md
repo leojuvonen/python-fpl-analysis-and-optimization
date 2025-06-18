@@ -85,3 +85,98 @@ print(markdown_table_gk)
 |  8 | Bernd Leno               |            115 |              0 |         2 |              5 |         50 |
 |  9 | Alisson Ramses Becker    |            112 |              0 |         0 |             10 |         55 |
 | 10 | Emiliano Martínez Romero |            111 |              0 |         0 |              8 |         50 |
+
+
+### Defenders
+
+```python
+top10_def = df[df["element_type"] == "DEF"].sort_values(by="total_points", ascending=False).head(10).reset_index(drop=True)
+top10_def.index = range(1, len(top10_def) + 1)
+markdown_table_def = top10_def[["full_name", "total_points", "goals_scored", "assists", "clean_sheets", "now_cost"]].to_markdown(index=False)
+print(markdown_table_def)
+```
+
+|    | full_name                         |   total_points |   goals_scored |   assists |   clean_sheets |   now_cost |
+|---:|:----------------------------------|---------------:|---------------:|----------:|---------------:|-----------:|
+|  1 | Joško Gvardiol                    |            153 |              5 |         0 |             13 |         65 |
+|  2 | Trent Alexander-Arnold            |            148 |              3 |         7 |             12 |         72 |
+|  3 | Nikola Milenković                 |            145 |              5 |         2 |             13 |         52 |
+|  4 | Virgil van Dijk                   |            143 |              3 |         1 |             14 |         67 |
+|  5 | Daniel Muñoz                      |            142 |              4 |         6 |             11 |         52 |
+|  6 | Milos Kerkez                      |            134 |              2 |         6 |              9 |         53 |
+|  7 | Marc Cucurella Saseta             |            133 |              5 |         2 |              9 |         54 |
+|  8 | William Saliba                    |            130 |              2 |         0 |             12 |         64 |
+|  9 | Murillo Santiago Costa dos Santos |            130 |              2 |         0 |             12 |         47 |
+| 10 | Ola Aina                          |            128 |              2 |         1 |             12 |         53 |
+
+### Midfielders
+
+```python
+top10_mid = df[df["element_type"] == "MID"].sort_values(by="total_points", ascending=False).head(10).reset_index(drop=True)
+top10_mid.index = range(1, len(top10_mid) + 1)
+markdown_table_mid = top10_mid[["full_name", "total_points", "goals_scored", "assists", "clean_sheets", "now_cost"]].to_markdown(index=True)
+print(markdown_table_mid)
+```
+|    | full_name              |   total_points |   goals_scored |   assists |   clean_sheets |   now_cost |
+|---:|:-----------------------|---------------:|---------------:|----------:|---------------:|-----------:|
+|  1 | Mohamed Salah          |            344 |             29 |        18 |             15 |        136 |
+|  2 | Bryan Mbeumo           |            236 |             20 |         9 |              9 |         83 |
+|  3 | Cole Palmer            |            214 |             15 |        10 |             10 |        105 |
+|  4 | Jarrod Bowen           |            193 |             13 |        11 |              8 |         79 |
+|  5 | Luis Díaz              |            183 |             13 |         7 |             15 |         75 |
+|  6 | Bruno Borges Fernandes |            174 |              8 |        12 |             10 |         84 |
+|  7 | Antoine Semenyo        |            165 |             11 |         7 |             11 |         57 |
+|  8 | Morgan Rogers          |            161 |              8 |        11 |             10 |         58 |
+|  9 | Jacob Murphy           |            159 |              8 |        13 |             11 |         52 |
+| 10 | Justin Kluivert        |            158 |             12 |         6 |             13 |         59 |
+
+### Forwards
+
+```python
+top10_fwd = df[df["element_type"] == "FWD"].sort_values(by="total_points", ascending=False).head(10).reset_index(drop=True)
+top10_fwd.index = range(1, len(top10_fwd) + 1)
+markdown_table_fwd = top10_fwd[["full_name", "total_points", "goals_scored", "assists", "clean_sheets", "now_cost"]].to_markdown(index=True)
+print(markdown_table_fwd)
+```
+|    | full_name                        |   total_points |   goals_scored |   assists |   clean_sheets |   now_cost |
+|---:|:---------------------------------|---------------:|---------------:|----------:|---------------:|-----------:|
+|  1 | Alexander Isak                   |            211 |             23 |         6 |             12 |         94 |
+|  2 | Chris Wood                       |            200 |             20 |         3 |             15 |         72 |
+|  3 | Ollie Watkins                    |            186 |             16 |         8 |             10 |         92 |
+|  4 | Yoane Wissa                      |            185 |             18 |         6 |              9 |         69 |
+|  5 | Erling Haaland                   |            181 |             22 |         3 |             10 |        149 |
+|  6 | Matheus Santos Carneiro Da Cunha |            178 |             15 |         7 |              7 |         70 |
+|  7 | Jean-Philippe Mateta             |            150 |             14 |         2 |              9 |         75 |
+|  8 | Raúl Jiménez                     |            147 |             12 |         3 |              7 |         53 |
+|  9 | Jørgen Strand Larsen             |            145 |             14 |         4 |              7 |         52 |
+| 10 | Liam Delap                       |            132 |             12 |         2 |              3 |         56 |
+
+
+## Best Value for Cost
+Let's create a new variable ("value") which represents the value for money a player provides. 
+
+```python
+df["value"] = df["total_points"]/df["now_cost"]
+```
+
+Now let's create a table of the top 10 players that provided the best value. We'll exclude the managers.
+
+```python
+top10_qty = df[df["element_type"] != "AM"].sort_values(by="value", ascending=False).head(10).reset_index(drop=True)
+top10_qty.index = range(1, len(top10_qty)+1)
+markdown_table_qty = top10_qty[["full_name", "element_type", "total_points", "now_cost", "value"]].to_markdown(index=True)
+print(markdown_table_qty)
+```
+|    | full_name       | element_type   |   total_points |   now_cost |   value |
+|---:|:----------------|:---------------|---------------:|-----------:|--------:|
+|  1 | Mark Flekken    | GK             |            138 |         45 | 3.06667 |
+|  2 | Jacob Murphy    | MID            |            159 |         52 | 3.05769 |
+|  3 | Jordan Pickford | GK             |            158 |         52 | 3.03846 |
+|  4 | Dean Henderson  | GK             |            135 |         46 | 2.93478 |
+|  5 | Antoine Semenyo | MID            |            165 |         57 | 2.89474 |
+|  6 | Alex Iwobi      | MID            |            156 |         54 | 2.88889 |
+|  7 | Matz Sels       | GK             |            150 |         52 | 2.88462 |
+|  8 | Enzo Fernández  | MID            |            135 |         47 | 2.87234 |
+|  9 | Bryan Mbeumo    | MID            |            236 |         83 | 2.84337 |
+| 10 | Kevin Schade    | MID            |            149 |         53 | 2.81132 |
+
