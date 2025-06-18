@@ -7,7 +7,7 @@ The project consists of the tabulation of players in different positions. We'll 
 Then we will analyze which of the ICT-variables predict total points the best, meaning which one of them is the most essential to look at. Then the age old question of, whether defenders should be picked based on goals and assists or clean sheets, will be assessed. 
 
 ## Tools
-The tool used in this project is Python. This analysis is mainly designed to help me familiarize Python and it's capabilities in data analysis. The packages used are pandas, statsmodels and matplotlib.
+The tool used in this project is Python. This analysis is mainly designed to help me familiarize myself with Python and it's capabilities in data analysis. The packages used are pandas, statsmodels and matplotlib.
 
 ## Data source
 The data used in this analysis is from vaastav's Github: https://github.com/vaastav/Fantasy-Premier-League/
