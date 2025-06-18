@@ -42,10 +42,9 @@ import pandas as pd
 # add full_name variable for clarity and readibility of the tables
 df["full_name"] = df["first_name"] + " " + df["second_name"]
 
-# pick out the 10 most effective players by total points
-top10_players = df.sort_values(by="total_points", ascending=False).head(10)
-# create a markdown table
-markdown_table_top10 = top10_players[["full_name", "total_points", "goals_scored", "assists", "clean_sheets", "now_cost"]].to_markdown(index=False)
+top10_players = df.sort_values(by="total_points", ascending=False).head(10).reset_index(drop=True)
+top10_players.index = range(1, len(top10_players) + 1)
+markdown_table_top10 = top10_players[["full_name", "element_type", "total_points", "goals_scored", "assists", "clean_sheets", "now_cost"]].to_markdown(index=True)
 print(markdown_table_top10)
 
 ```
@@ -62,3 +61,27 @@ print(markdown_table_top10)
 |  8 | Yoane Wissa    | FWD            |            185 |             18 |         6 |              9 |         69 |
 |  9 | Luis Díaz      | MID            |            183 |             13 |         7 |             15 |         75 |
 | 10 | Erling Haaland | FWD            |            181 |             22 |         3 |             10 |        149 |
+
+Next we'll repeat with each position.
+
+### Goalkeepers
+
+```python
+top10_gk = df[df["element_type"] == "GK"].sort_values(by="total_points", ascending=False).head(10).reset_index(drop=True)
+top10_gk.index = range(1, len(top10_gk) + 1)
+markdown_table_gk = top10_gk[["full_name", "total_points", "goals_scored", "assists", "clean_sheets", "now_cost"]].to_markdown(index=True)
+print(markdown_table_gk)
+
+```
+|    | full_name                |   total_points |   goals_scored |   assists |   clean_sheets |   now_cost |
+|---:|:-------------------------|---------------:|---------------:|----------:|---------------:|-----------:|
+|  1 | Jordan Pickford          |            158 |              0 |         1 |             12 |         52 |
+|  2 | Matz Sels                |            150 |              0 |         1 |             13 |         52 |
+|  3 | David Raya Martin        |            142 |              0 |         0 |             13 |         56 |
+|  4 | Mark Flekken             |            138 |              0 |         2 |              7 |         45 |
+|  5 | Dean Henderson           |            135 |              0 |         0 |             11 |         46 |
+|  6 | Robert Sánchez           |            126 |              0 |         0 |             10 |         45 |
+|  7 | André Onana              |            120 |              0 |         0 |              9 |         49 |
+|  8 | Bernd Leno               |            115 |              0 |         2 |              5 |         50 |
+|  9 | Alisson Ramses Becker    |            112 |              0 |         0 |             10 |         55 |
+| 10 | Emiliano Martínez Romero |            111 |              0 |         0 |              8 |         50 |
