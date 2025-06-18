@@ -50,15 +50,15 @@ print(markdown_table_top10)
 
 ```
 
-| full_name      |   total_points |   goals_scored |   assists |   clean_sheets |   now_cost |
-|:---------------|---------------:|---------------:|----------:|---------------:|-----------:|
-| Mohamed Salah  |            344 |             29 |        18 |             15 |        136 |
-| Bryan Mbeumo   |            236 |             20 |         9 |              9 |         83 |
-| Cole Palmer    |            214 |             15 |        10 |             10 |        105 |
-| Alexander Isak |            211 |             23 |         6 |             12 |         94 |
-| Chris Wood     |            200 |             20 |         3 |             15 |         72 |
-| Jarrod Bowen   |            193 |             13 |        11 |              8 |         79 |
-| Ollie Watkins  |            186 |             16 |         8 |             10 |         92 |
-| Yoane Wissa    |            185 |             18 |         6 |              9 |         69 |
-| Luis Díaz      |            183 |             13 |         7 |             15 |         75 |
-| Erling Haaland |            181 |             22 |         3 |             10 |        149 |
+|    | full_name      | element_type   |   total_points |   goals_scored |   assists |   clean_sheets |   now_cost |
+|---:|:---------------|:---------------|---------------:|---------------:|----------:|---------------:|-----------:|
+|  1 | Mohamed Salah  | MID            |            344 |             29 |        18 |             15 |        136 |
+|  2 | Bryan Mbeumo   | MID            |            236 |             20 |         9 |              9 |         83 |
+|  3 | Cole Palmer    | MID            |            214 |             15 |        10 |             10 |        105 |
+|  4 | Alexander Isak | FWD            |            211 |             23 |         6 |             12 |         94 |
+|  5 | Chris Wood     | FWD            |            200 |             20 |         3 |             15 |         72 |
+|  6 | Jarrod Bowen   | MID            |            193 |             13 |        11 |              8 |         79 |
+|  7 | Ollie Watkins  | FWD            |            186 |             16 |         8 |             10 |         92 |
+|  8 | Yoane Wissa    | FWD            |            185 |             18 |         6 |              9 |         69 |
+|  9 | Luis Díaz      | MID            |            183 |             13 |         7 |             15 |         75 |
+| 10 | Erling Haaland | FWD            |            181 |             22 |         3 |             10 |        149 |
