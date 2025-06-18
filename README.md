@@ -17,4 +17,47 @@ The data used in this analysis is from vaastav's Github: https://github.com/vaas
   ├── data/ # Sample or anonymized datasets 
   ├── scripts/ # R scripts used in the analysis 
   ├── images/ # output plots
+  ├── fpl_analysis.py
   └── README.md # Project overview and usage instructions </code> </code></pre>
+
+## Requirements 
+
+This project uses the following Python packages:
+
+- pandas
+- matplotlib
+- statsmodels
+
+You can install them using:
+
+```bash
+pip install pandas matplotlib statsmodels
+
+## Top Performers
+```
+First let's simply determine the ten top players in FPL in the 24/25 season. 
+
+```python
+# add full_name variable for clarity and readibility of the tables
+df["full_name"] = df["first_name"] + " " + df["second_name"]
+
+# pick out the 10 most effective players by total points
+top10_players = df.sort_values(by="total_points", ascending=False).head(10)
+# create a markdown table
+markdown_table_top10 = top10_players[["full_name", "total_points", "goals_scored", "assists", "clean_sheets", "now_cost"]].to_markdown(index=False)
+print(markdown_table_top10)
+
+```
+
+| full_name      |   total_points |   goals_scored |   assists |   clean_sheets |   now_cost |
+|:---------------|---------------:|---------------:|----------:|---------------:|-----------:|
+| Mohamed Salah  |            344 |             29 |        18 |             15 |        136 |
+| Bryan Mbeumo   |            236 |             20 |         9 |              9 |         83 |
+| Cole Palmer    |            214 |             15 |        10 |             10 |        105 |
+| Alexander Isak |            211 |             23 |         6 |             12 |         94 |
+| Chris Wood     |            200 |             20 |         3 |             15 |         72 |
+| Jarrod Bowen   |            193 |             13 |        11 |              8 |         79 |
+| Ollie Watkins  |            186 |             16 |         8 |             10 |         92 |
+| Yoane Wissa    |            185 |             18 |         6 |              9 |         69 |
+| Luis Díaz      |            183 |             13 |         7 |             15 |         75 |
+| Erling Haaland |            181 |             22 |         3 |             10 |        149 |
