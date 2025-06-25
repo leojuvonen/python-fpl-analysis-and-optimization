@@ -142,6 +142,7 @@ model_all = sm.OLS(df[["total_points"]], df[["influence", "creativity", "threat"
 print(model_all.summary())
 
 ```
+The results:
 
 | Variable        | model_influence | model_creativity| model_threat | model_ict    | model_all |
 | --------------- | ------------- | ------------- | ------------- | ------------- | ------------|
@@ -153,7 +154,13 @@ print(model_all.summary())
 |                 |               |                | (0.005)      |                 |      (0.004)      |
 | ICT-index       | -             | -             | -               | 0.7367\*\*\* |     -       |
 |                 |               |                 |               | (0.009)      |            |
-| **R²**           | 0.870         | 0.699         | 0.711         | 0.891         | 0.913      |
+| **$R^2$**           | 0.870         | 0.699         | 0.711         | 0.891         | 0.913      |
+
+---
+
+* (*): Statistically significant at 90% level  
+* (**): Statistically significant at 95% level  
+* (***): Statistically significant at 99% level  
 
 The regression results show that out of all the individual variables, the Threat first looks like the biggest contributor to total points. The coefficient is the largest and it is statistically significant. After all of the variables are included in the model in model_all, it seems that Influence has the greatest impact. 
 None of the individual variables however can hold a candle to the ICT-index which has by far the greatest impact of total points according to these regressions. 
@@ -164,5 +171,48 @@ The main giveaway is that Influence seems to be the most prominent  variable whe
 
 All FPL-managers face this dilemma when considering which defenders to include in their team. Should they prioritize the strength of the team's defence, or the potential for goal contributions?
 
+Let's start by creating a variable that holds goals scored and assists. This way we can examine goal contributions' effect instead of one or the another. We will also create a new dataframe that only has the players who are classified as defenders by FPL.
+
+```python
+df["goals_assists"] = df["goals_scored"] + df["assists"]
+df_def = df[df["element_type"] == "DEF"]
+```
+
+Next we will construct regression models for how goal contributions and clean sheet predict total points. The third model includes both models.
+
+```python
+# goals and assists - model
+model_def_ga = sm.OLS(df_def[["total_points"]], df_def[["goals_assists"]]).fit()
+print(model_def_ga.summary())
+
+# clean sheet - model
+model_def_cs = sm.OLS(df_def[["total_points"]], df_def[["clean_sheets"]]).fit()
+print(model_def_cs.summary())
+
+# both variables model
+model_def_all = sm.OLS(df_def[["total_points"]], df_def[["goals_assists", "clean_sheets"]]).fit()
+print(model_def_all.summary())
+
+```
+
+The results:
+
+| Variable        | model_def_ga | model_def_cs| model_def_all | 
+| --------------- | ------------- | ------------- | ------------- | 
+| goals_assits       | 19.0482\*\*\* | -               |5.9643\*\*\*      |
+|                 | (0.703)       |                |   (0.337)           |
+| clean_sheets      | -             | 11.7244\*\*\* |  9.2442\*\*\*        | 
+|                 |               | (0.173)      |    (0.183)            |
+| **$R^2$**           | 0.733         | 0.945         | 0.975         | 
+
+---
+
+* (*): Statistically significant at 90% level  
+* (**): Statistically significant at 95% level  
+* (***): Statistically significant at 99% level  
+
+At first glance, goal contributions (goals and assisits) seems to have a bigger impact. The coefficient is larger and it is statistically significant. The $R^2$ however is lower than with the clean sheets - model. After including both variables to the model, it is also apparent that clean sheets are more impactful when predicting total points. This can be seen by the change in the coefficient's relative size and also by the $R^2$ value.
+
+Both variables are still important to consider. The optimal allocation of attacking and defending can be interpreted as being $\frac{5.9643}{5.9643+9.2442} \approx 0.3922$ for attacking and $\frac{9.2442}{5.9643+9.2442} \approx 0.6078$ for defending, meaning that the importance of attacking is around 39% and defending is around 61%.
 
 ## Optimization
