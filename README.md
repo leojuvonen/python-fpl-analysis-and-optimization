@@ -133,7 +133,7 @@ print(model_creativity.summary())
 model_threat = sm.OLS(df[["total_points"]], df[["threat"]]). fit()
 print(model_threat.summary())
 
-# ict indeksi
+# ict index
 model_ict = sm.OLS(df[["total_points"]], df[["ict_index"]]).fit()
 print(model_ict.summary())
 
