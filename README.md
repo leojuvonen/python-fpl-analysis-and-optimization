@@ -44,6 +44,8 @@ pip install pandas matplotlib statsmodels
 ```
 ## Analysis
 
+The code for this section is provided as fpl_analysis.py.
+
 ### Top Performers
 
 First let's simply determine the ten top players in FPL in the 24/25 season. 
