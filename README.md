@@ -2,23 +2,32 @@
 
 This project shows my journey into learning Python for data analysis using football data from Fantasy Premier League. I explore the significance of various variables within the dataset.
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Tools](#tools)
+- [Data Source](#data-source)
+- [Requirements](#requirements)
+- [Analysis](#analysis)
+  - [Top Performers](#top-performers)
+  - [Best Value for Cost](#best-value-for-cost)
+  - [Influence, Creativity and Threat](#influence-creativity-and-threat)
+  - [Defenders: Attack or Defence](#defenders-attack-or-defence)
+- [Optimization](#optimization)
+
+
 ## Overview
-The project consists of the tabulation of players in different positions. We'll also examine the top players in terms on price to total points ratio, influence, creativity and threat (ICT). 
-Then we will analyze which of the ICT-variables predict total points the best, meaning which one of them is the most essential to look at. Then the age old question of, whether defenders should be picked based on goals and assists or clean sheets, will be assessed. 
+The project consists of the analysis of premier league players in the context of Fantasy Premier League, where players are given points depending on actions in games like goals scored, assists or clean sheets. The top players will be assessed terms on price to total points ratio, influence, creativity and threat (ICT).
+
+The analysis will start by assessing which of the ICT-variables predict total points the best, meaning which one of them is the most essential to look at when choosing a player for your FPL-team. Then the age old question of, whether defenders should be picked based on goals and assists or clean sheets, will hopefully be answered. 
+
+Lastly three approaches for optimizing a team will be conducted. The first approach is to maximize the full 15 player squad. The second approach will be to only maximize the points of the players that are on the field, minimizing any wasted points on the bench. Lastly a hybrid where there will be some efficient players on the bench in case of injurys, but the main focus is on the players that will be on the field.
 
 ## Tools
 The tool used in this project is Python. This analysis is mainly designed to help me familiarize myself with Python and it's capabilities in data analysis. The packages used are pandas, statsmodels and matplotlib.
 
-## Data source
+## Data Source
 The data used in this analysis is from vaastav's Github: https://github.com/vaastav/Fantasy-Premier-League/
-
-## Project structure
-<code>  python-fantasy-football-analysis/
-  ├── data/ # Sample or anonymized datasets 
-  ├── scripts/ # R scripts used in the analysis 
-  ├── images/ # output plots
-  ├── fpl_analysis.py
-  └── README.md # Project overview and usage instructions </code> </code></pre>
 
 ## Requirements 
 
@@ -100,7 +109,7 @@ print(markdown_table_qty)
 These are players that can give the team the most points for a lower cost according to the 24/25 season. 
 
 
-### Less Obvious Metrics for Points (ICT)
+### Influence, Creativity and Threat
 
 Strictly looking at the goals scored, assists or clean sheets is of course the safest way of assessing a player's value in terms of FPL points. But in order to look for a competetive advantage, it could be useful to use less obvious metrics, that may provide information on long term effectiviness that isn't as apparent as goals etc. 
 For example, these variables could be Influence, Creativity and Threat. There is also the ICT-index that contains all these variables. Let's test the predictive value of all these variables, and which should be given the most weight. 
@@ -151,7 +160,9 @@ None of the individual variables however can hold a candle to the ICT-index whic
 
 The main giveaway is that Influence seems to be the most prominent  variable when the other ICT-variables are controlled. Still, the ICT-index is by far more relevant.
 
-### Defenders: Goals or Clean sheets?
+### Defenders: Attack or Defence?
 
 All FPL-managers face this dilemma when considering which defenders to include in their team. Should they prioritize the strength of the team's defence, or the potential for goal contributions?
 
+
+## Optimization
