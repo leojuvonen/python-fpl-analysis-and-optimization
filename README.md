@@ -218,3 +218,5 @@ At first glance, goal contributions (goals and assisits) seems to have a bigger 
 Both variables are still important to consider. The optimal allocation of attacking and defending can be interpreted as being $\frac{5.9643}{5.9643+9.2442} \approx 0.3922$ for attacking and $\frac{9.2442}{5.9643+9.2442} \approx 0.6078$ for defending, meaning that the importance of attacking is around 39% and defending is around 61%.
 
 ## Optimization
+
+WORK IN PROGRESS
