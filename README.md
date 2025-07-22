@@ -14,6 +14,7 @@ This project shows my journey into learning Python for data analysis using footb
   - [Influence, Creativity and Threat](#influence-creativity-and-threat)
   - [Defenders: Attack or Defence](#defenders-attack-or-defence)
 - [Optimization](#optimization)
+- [Notes](#notes)
 
 
 ## Overview
@@ -24,7 +25,7 @@ The analysis will start by assessing which of the ICT-variables predict total po
 Lastly three approaches for optimizing a team will be conducted. The first approach is to maximize the full 15 player squad. The second approach will be to only maximize the points of the players that are on the field, minimizing any wasted points on the bench. Lastly a hybrid where there will be some efficient players on the bench in case of injurys, but the main focus is on the players that will be on the field.
 
 ## Tools
-The tool used in this project is Python. This analysis is mainly designed to help me familiarize myself with Python and it's capabilities in data analysis. The packages used are pandas, statsmodels and matplotlib.
+The tool used in this project is Python. This analysis is mainly designed to help me familiarize myself with Python and it's capabilities in data analysis. The packages used are pandas, statsmodels, requests, unicodedata and pulp.
 
 ## Data Source
 The data used in this analysis is from vaastav's Github: https://github.com/vaastav/Fantasy-Premier-League/
@@ -34,13 +35,15 @@ The data used in this analysis is from vaastav's Github: https://github.com/vaas
 This project uses the following Python packages:
 
 - pandas
-- matplotlib
 - statsmodels
+- requests
+- unicodedata
+- pulp
 
 You can install them using:
 
 ```console
-pip install pandas matplotlib statsmodels
+pip install pandas statsmodels requests unicodedata pulp
 ```
 ## Analysis
 
@@ -219,4 +222,115 @@ Both variables are still important to consider. The optimal allocation of attack
 
 ## Optimization
 
-WORK IN PROGRESS
+Optimization process starts by merging the previous dataframe's total_points variable into a new dataframe that includes the player's new prices for the 25/26 season. The new dataframe also includes updated positions and teams.
+
+``` python
+import requests as rq
+
+url = "https://fantasy.premierleague.com/api/bootstrap-static/"
+data = rq.get(url).json()
+
+new_df = pd.DataFrame(data["elements"])
+new_df = new_df[["first_name", "second_name", "now_cost", "team", "element_type"]]
+new_df['new_cost']=new_df['now_cost']
+new_df["position"] = new_df["element_type"]
+new_df["full_name"]=new_df["first_name"]+ " " + new_df["second_name"]
+
+# remove accents from names to allow easier merging of dataframes
+import unicodedata
+
+def remove_accents(text: str) -> str:
+    nfkd = unicodedata.normalize("NFKD", text)
+    return nfkd.encode("ASCII", "ignore").decode("ASCII")
+
+new_df["full_name"] = new_df["full_name"].apply(remove_accents)
+
+# add total_points to new_df
+df_unique = df.drop_duplicates(subset="full_name")
+new_df = new_df.merge(
+    df_unique[["full_name", "total_points"]],
+    how="left",
+    on="full_name"
+)
+```
+
+Next we will start the optimization.
+
+```python
+# we will omit players that have left the league and don't have a new_cost variable
+# we will also omit players who are new or for other reasons do not have total_points from previous season
+
+new_df = new_df.dropna(subset=["new_cost"]).reset_index(drop=True)
+new_df = new_df.dropna(subset=["total_points"]).reset_index(drop=True)
+
+
+n_players = len(new_df)
+
+# optimization problem
+prob =pulp.LpProblem("FPL_Selection", pulp.LpMaximize)
+
+# create selection variables
+x = [pulp.LpVariable(f"x_{i}", cat="Binary") for i in range(n_players)]
+
+# objective function (maximize total points)
+prob += pulp.lpSum(new_df.loc[i, "total_points"]*x[i] for i in range(n_players))
+
+# max 15 players
+prob += pulp.lpSum(x) == 15 
+
+# positional restrictions (1=GK, 2=DEF, 3=MID, 4=FWD)
+for pos, req in [(1, 2), (2, 5), (3, 5), (4, 3)]:
+    prob += pulp.lpSum(x[i] for i in range(n_players) if new_df.loc[i, "position"] == pos) == req
+
+# budget constraint
+prob += pulp.lpSum(new_df.loc[i, "new_cost"] * x[i] for i in range(n_players)) <= 1000
+
+# 3 players per team max
+teams = new_df["team"].unique()
+for team in teams:
+    prob += pulp.lpSum(x[i] for i in range (n_players) if new_df.loc[i, "team"] == team) <= 3
+
+prob.solve()
+print("Status:", pulp.LpStatus[prob.status])
+
+selected_indices = [
+    i
+    for i in range(n_players)
+    if x[i].value() == 1          # or x[i].varValue == 1
+]
+
+# build a dataframe of your chosen squad
+df_selected_max = new_df.loc[
+    selected_indices,
+    ["second_name", "position", "team", "new_cost", "total_points"]
+].reset_index(drop=True)
+
+print(df_selected_max)
+```
+
+The code will provide us with this group of players that will maximize total_points while staying under the 100(0) budget constraint.
+
+|    | full_name         |   position |   team |   new_cost |   total_points |
+|---:|:------------------|-----------:|-------:|-----------:|---------------:|
+|  1 | Jordan Pickford   |          GK |      Everton |         55 |            158 |
+| 2 | Matz Sels         |          GK |     Nottingham Forest |         50 |            150 |
+| 3 | Ola Aina          |          DEF |     Nottingham Forest |         50 |            128 |
+|  4 | Nathan Collins    |          DEF |      Brentford |         50 |            127 |
+|  5 | Tyrick Mitchell   |          DEF |      Crystal Palace |         50 |            123 |
+|6 | Aaron Wan-Bissaka |          DEF |     West Ham |         45 |            118 |
+|  7 | Ezri Konsa Ngoyo  |          DEF |      Aston Villa |         45 |            103 |
+|  8 | Mohamed Salah     |          MID |     Liverpool |        145 |            344 |
+| 9 | Bryan Mbeumo      |          MID |      Manchester United |         80 |            236 |
+|  10 | Antoine Semenyo   |          MID |      Bournemouth |         70 |            165 |
+|  11 | Jacob Murphy      |          MID |     Newcastle |         65 |            159 |
+|  12 | Alex Iwobi        |          MID |     Fulham |         65 |            156 |
+| 13 | Chris Wood        |          FWD |     Nottingham Forest |         75 |            200 |
+|  14 | Yoane Wissa       |          FWD |      Brentford |         75 |            185 |
+| 15 | Jarrod Bowen      |          FWD |     West Ham |         80 |            193 |
+
+It should be noted that this team would probably not be optimal because 4 players would have to be benched each gameweek. Depending on the fpl-manager's level of risk aversion and personal preference, bench player's could be selected separately to direct more funds towards outfield players. The level of this change would depend solely on the independent managers.
+
+## Notes
+
+The code used to generate these results was developed with the assistance of AI tools, specifically ChatGPT and Microsoft Copilot. 
+
